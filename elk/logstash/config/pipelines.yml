@@ -1,0 +1,14 @@
+# This file is where you define your pipelines. You can define multiple.
+# For more information on multiple pipelines, see the documentation:
+#   https://www.elastic.co/guide/en/logstash/current/multiple-pipelines.html
+
+# - pipeline.id: csv_test
+#   path.config: "/usr/share/logstash/pipeline/csv_test.conf"
+# - pipeline.id: csv_crimes
+#   path.config: "/usr/share/logstash/pipeline/csv_crimes.conf"
+- pipeline.id: flask_logstash_stream_log
+  path.config: "/usr/share/logstash/pipeline/flask_logstash_stream_log.conf"
+- pipeline.id: flask_log
+  path.config: "/usr/share/logstash/pipeline/flask_log.conf"
+- pipeline.id: simple_web_log
+  path.config: "/usr/share/logstash/pipeline/simple_web_log.conf"

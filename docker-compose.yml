@@ -1,0 +1,257 @@
+version: "3.7"
+
+services:
+
+  ### [WAS] ###
+  flask:
+    build: ./flask-web
+    container_name: flask
+    restart: always
+    ports:
+      - "5000:5000"
+    hostname: flask
+    networks:
+      - elastic
+    depends_on: 
+      - postgres
+    volumes:
+      - ./flask-web/log:/tmp/logs
+
+  ngnix:
+    build: ./nginx
+    container_name: nginx
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - elastic
+    volumes:
+      - ./nginx/log:/var/log/nginx
+
+  ### [DB] ###
+  postgres:
+    image: postgres
+    hostname: postgres
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER:      postgres
+      POSTGRES_PASSWORD:  postgres
+      POSTGRES_DB:        simple
+    networks:
+      - elastic
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  ### [ELK] ###
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
+    container_name: es01
+    restart: always
+    environment:
+      node.name: es01
+      cluster.name: es-docker-cluster
+      discovery.seed_hosts: es02,es03
+      cluster.initial_master_nodes: es01,es02,es03
+      bootstrap.memory_lock: "true"
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      xpack.security.enabled: "false"
+      xpack.monitoring.enabled: "false"
+    ulimits: # 프로세스 자원 한도 설정
+      memlock:  # 메모리 내 주소공간의 최대 크기 (sfot: 기본 적용 값, hard: soft에서 최대로 늘릴 한도)
+        soft: -1
+        hard: -1
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - elastic
+    healthcheck:
+      test: ["CMD", "curl","-s" ,"-f", "http://localhost:9200/_cat/health"]
+      interval: 30s
+      start_period: 60s
+
+  es02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
+    container_name: es02
+    restart: always
+    environment:
+      node.name: es02
+      cluster.name: es-docker-cluster
+      discovery.seed_hosts: es01,es03
+      cluster.initial_master_nodes: es01,es02,es03
+      bootstrap.memory_lock: "true"
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      xpack.security.enabled: "false"
+      xpack.monitoring.enabled: "false"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data02:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+
+  es03:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
+    container_name: es03
+    restart: always
+    environment:
+      node.name: es03
+      cluster.name: es-docker-cluster
+      discovery.seed_hosts: es01,es02
+      cluster.initial_master_nodes: es01,es02,es03
+      bootstrap.memory_lock: "true"
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      xpack.security.enabled: "false"
+      xpack.monitoring.enabled: "false"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data03:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+
+  kib01: 
+    image: docker.elastic.co/kibana/kibana:7.13.2
+    container_name: kib01
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_URL: http://es01:9200
+      ELASTICSEARCH_HOSTS: '["http://es01:9200","http://es02:9200","http://es03:9200"]'
+    networks:
+      - elastic
+    healthcheck:
+      test: ["CMD", "curl","-s" ,"-f", "http://es01:5601/_cat/health"]
+      interval: 30s
+      start_period: 60s
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.13.2
+    container_name: logstash
+    ports:
+      - "5001:5001/tcp"
+      - "5001:5001/udp"
+      - "9600:9600"
+    environment:
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+    volumes: 
+      - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./elk/logstash/config/pipelines.yml:/usr/share/logstash/config/pipelines.yml
+      - ./elk/logstash/pipeline/:/usr/share/logstash/pipeline/
+      - ./nginx/log:/var/log/nginx
+      - ./flask-web/log:/var/log/flask-web
+    networks: 
+      - elastic
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl","-s" ,"-f", "http://es01:9600/_cat/health"]
+      interval: 30s
+      start_period: 60s
+  
+  ### [nifi] ###
+  nifi_1:
+    image: apache/nifi:latest
+    container_name: nifi_1
+    ports:
+      - 8081:8081
+    # restart: always
+    environment: 
+      - NIFI_WEB_HTTP_PORT=8081
+      - NIFI_CLUSTER_IS_NODE=true
+      - NIFI_CLUSTER_NODE_PROTOCOL_PORT=9081
+      - NIFI_ZK_CONNECT_STRING=zookeeper:2181
+      - NIFI_ELECTION_MAX_WAIT=1 min
+    volumes: 
+      - ./nifi/driver:/opt/nifi/nifi-current/driver
+      - ./nifi_1/state:/opt/nifi/nifi-current/state
+      - ./nifi_1/db:/opt/nifi/nifi-current/database_repository
+      - ./nifi_1/flowfile:/opt/nifi/nifi-current/flowfile_repository
+      - ./nifi_1/content:/opt/nifi/nifi-current/content_repository
+      - ./nifi_1/provenance:/opt/nifi/nifi-current/provenance_repository
+    networks: 
+      - elastic
+    depends_on: 
+      - zookeeper
+    healthcheck:
+      test: ["CMD", "curl","-s" ,"-f", "http://localhost:8081/nifi"]
+      interval: 30s
+      start_period: 60s
+
+  nifi_2:
+    image: apache/nifi:latest
+    container_name: nifi_2
+    # restart: always
+    ports:
+      - 8082:8082
+    environment: 
+      - NIFI_WEB_HTTP_PORT=8082
+      - NIFI_CLUSTER_IS_NODE=true
+      - NIFI_CLUSTER_NODE_PROTOCOL_PORT=9082
+      - NIFI_ZK_CONNECT_STRING=zookeeper:2181
+      - NIFI_ELECTION_MAX_WAIT=1 min
+    volumes: 
+      - ./nifi/driver:/opt/nifi/nifi-current/driver
+      - ./nifi_2/state:/opt/nifi/nifi-current/state
+      - ./nifi_2/db:/opt/nifi/nifi-current/database_repository
+      - ./nifi_2/flowfile:/opt/nifi/nifi-current/flowfile_repository
+      - ./nifi_2/content:/opt/nifi/nifi-current/content_repository
+      - ./nifi_2/provenance:/opt/nifi/nifi-current/provenance_repository
+    networks: 
+      - elastic
+    depends_on: 
+      - zookeeper
+    healthcheck:
+      test: ["CMD", "curl","-s" ,"-f", "http://localhost:8082/nifi"]
+      interval: 30s
+      start_period: 60s
+  
+  nifi-registry:
+    image: apache/nifi-registry:0.5.0
+    ports:
+      - 18080:18080
+    container_name: nifi-registry
+    # restart: always
+    networks: 
+      - elastic
+    environment: 
+      - LOG_LEVEL=INFO
+      - NIFI_REGISTRY_DB_DIR=/opt/nifi-registry/database
+      - NIFI_REGISTRY_FLOW_PROVIDER=file
+      - NIFI_REGISTRY_FLOW_STORAGE_DIR=/opt/nifi-registry/flow_storage
+    volumes:
+      - ./nifi/database:/opt/nifi-registry/nifi-registry-current/database
+      - ./nifi/flow_storage:/opt/nifi-registry/nifi-registry-current/flow_storage
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - 2181:2181
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks: 
+      - elastic
+
+
+volumes:
+  data01:
+  data02:
+  data03:
+  postgres_data: 
+  nifi:
+  nifi_1:
+  nifi_2:
+
+networks:
+  elastic:
+    driver: bridge
+  

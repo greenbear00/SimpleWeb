@@ -1,0 +1,9 @@
+uwsgi
+gunicorn
+flask
+flask_restful
+bcrypt
+python3-logstash
+sqlalchemy
+pg8000
+SQLAlchemy-Utils

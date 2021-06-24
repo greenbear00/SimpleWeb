@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello</title>
+</head>
+<body>
+    {% if session %}
+        <div>
+        hello {{ session['loggin_id'] }}.
+        </div>
+        <div>
+            <a href="{{ url_for('users.logout') }}"> login out</a>
+        </div>
+    {% else %}
+        <div>
+        hello! everyone!
+        </div>
+        <div><a href="{{ url_for('users.login') }}">login</a></div>
+        <div><a href="{{ url_for('users.signup') }}">singup</a></div>
+    {% endif %}
+</body>
+</html>
