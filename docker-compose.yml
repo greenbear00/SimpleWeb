@@ -168,4 +168,5 @@ volumes:
 networks:
   elastic:
     driver: bridge
+    name: elastic
   

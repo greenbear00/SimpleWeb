@@ -16,5 +16,5 @@ else
   
   
   echo "docker-compose up -d --build"
-  docker-compose up -d --build
+  docker-compose up -d
 fi
