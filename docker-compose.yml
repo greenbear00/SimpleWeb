@@ -156,90 +156,7 @@ services:
       interval: 30s
       start_period: 60s
   
-  ### [nifi] ###
-  nifi_1:
-    image: apache/nifi:latest
-    container_name: nifi_1
-    ports:
-      - 8081:8081
-    # restart: always
-    environment: 
-      - NIFI_WEB_HTTP_PORT=8081
-      - NIFI_CLUSTER_IS_NODE=true
-      - NIFI_CLUSTER_NODE_PROTOCOL_PORT=9081
-      - NIFI_ZK_CONNECT_STRING=zookeeper:2181
-      - NIFI_ELECTION_MAX_WAIT=1 min
-    volumes: 
-      - ./nifi/driver:/opt/nifi/nifi-current/driver
-      - ./nifi_1/state:/opt/nifi/nifi-current/state
-      - ./nifi_1/db:/opt/nifi/nifi-current/database_repository
-      - ./nifi_1/flowfile:/opt/nifi/nifi-current/flowfile_repository
-      - ./nifi_1/content:/opt/nifi/nifi-current/content_repository
-      - ./nifi_1/provenance:/opt/nifi/nifi-current/provenance_repository
-    networks: 
-      - elastic
-    depends_on: 
-      - zookeeper
-    healthcheck:
-      test: ["CMD", "curl","-s" ,"-f", "http://localhost:8081/nifi"]
-      interval: 30s
-      start_period: 60s
-
-  nifi_2:
-    image: apache/nifi:latest
-    container_name: nifi_2
-    # restart: always
-    ports:
-      - 8082:8082
-    environment: 
-      - NIFI_WEB_HTTP_PORT=8082
-      - NIFI_CLUSTER_IS_NODE=true
-      - NIFI_CLUSTER_NODE_PROTOCOL_PORT=9082
-      - NIFI_ZK_CONNECT_STRING=zookeeper:2181
-      - NIFI_ELECTION_MAX_WAIT=1 min
-    volumes: 
-      - ./nifi/driver:/opt/nifi/nifi-current/driver
-      - ./nifi_2/state:/opt/nifi/nifi-current/state
-      - ./nifi_2/db:/opt/nifi/nifi-current/database_repository
-      - ./nifi_2/flowfile:/opt/nifi/nifi-current/flowfile_repository
-      - ./nifi_2/content:/opt/nifi/nifi-current/content_repository
-      - ./nifi_2/provenance:/opt/nifi/nifi-current/provenance_repository
-    networks: 
-      - elastic
-    depends_on: 
-      - zookeeper
-    healthcheck:
-      test: ["CMD", "curl","-s" ,"-f", "http://localhost:8082/nifi"]
-      interval: 30s
-      start_period: 60s
   
-  nifi-registry:
-    image: apache/nifi-registry:0.5.0
-    ports:
-      - 18080:18080
-    container_name: nifi-registry
-    # restart: always
-    networks: 
-      - elastic
-    environment: 
-      - LOG_LEVEL=INFO
-      - NIFI_REGISTRY_DB_DIR=/opt/nifi-registry/database
-      - NIFI_REGISTRY_FLOW_PROVIDER=file
-      - NIFI_REGISTRY_FLOW_STORAGE_DIR=/opt/nifi-registry/flow_storage
-    volumes:
-      - ./nifi/database:/opt/nifi-registry/nifi-registry-current/database
-      - ./nifi/flow_storage:/opt/nifi-registry/nifi-registry-current/flow_storage
-
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper
-    ports:
-      - 2181:2181
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    networks: 
-      - elastic
 
 
 volumes:
@@ -247,9 +164,6 @@ volumes:
   data02:
   data03:
   postgres_data: 
-  nifi:
-  nifi_1:
-  nifi_2:
 
 networks:
   elastic:

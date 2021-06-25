@@ -4,8 +4,7 @@
 2 logger 수집
     - flask 로그와 nginx 로그를 logstash를 통해서 elastic으로 전송
 3. nifi 적용
-    - nifi로 RDB 내용과 logger를 hadoop에 전송
-4. hadoop 구성
+    - nifi로 RDB 내용과 logger를 
 
 
 ## logger 셋팅
@@ -138,16 +137,6 @@ log 셋팅(nginx와 flask의 log를 logstash를 통하여 elastic으로 전송)
     - 참고로 sample template는 .nifi/template에 존재
 - template import 방법
     - nifi 화면에서 왼쪽 Operate를 통해 [Upload template] 아이콘을 선택 -> 상단 [Template] 메뉴를 통해 upload한 template 중 필요한 template 로드
-
-## hadoop 셋팅
-- hadoop 정보 확인
-    * Namenode: http://<dockerhadoop_IP_address>:9870/dfshealth.html#tab-overview
-    * History server: http://<dockerhadoop_IP_address>:8188/applicationhistory
-    * Datanode: http://<dockerhadoop_IP_address>:19864/ (~19865,19866)
-    * Nodemanager: http://<dockerhadoop_IP_address>:18042/node (~18043, 18044)
-    * Resource manager: http://<dockerhadoop_IP_address>:8088/
-- was와 hive-metastore-postgres와 postgres port 충돌이 발생하여, hive-metastore-postgres는 원래 5432로 설정하고, was에서는 5433으로 설정함 
-
 
 # build
 ```
