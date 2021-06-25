@@ -26,3 +26,12 @@
 2021-06-24 08:12:21,815 - werkzeug - 172.18.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
 2021-06-24 08:13:07,854 - werkzeug - 172.18.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
 2021-06-24 08:17:25,759 - werkzeug - 172.18.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-24 23:41:48,431 - werkzeug - 172.20.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-24 23:52:23,262 - werkzeug - 172.20.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-24 23:52:23,268 - werkzeug - 172.20.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-24 23:53:04,479 - werkzeug - 172.20.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-24 23:55:23,506 - werkzeug - 172.20.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-24 23:56:24,592 - werkzeug - 172.20.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-25 00:00:14,256 - werkzeug - 172.20.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-25 00:24:14,132 - werkzeug - 172.18.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-25 00:26:01,494 - werkzeug - 172.18.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
