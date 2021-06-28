@@ -1,15 +1,15 @@
 # 구성
-1. flask+uwsgi+nginx를 붙임
-    - request --[http://localhost:8081]--> nginx --[8081:5000]--> flask+uwsgi [app]
-2. logger 수집
-    - flask 로그와 nginx 로그를 logstash를 통해서 elastic으로 전송
 
+## 1. flask+uwsgi+nginx를 붙임
+- request --[http://localhost:8081]--> nginx --[8081:5000]--> flask+uwsgi [app]
+- 관련 환경설정 파일은 각 디렉토리 참조
 
-## logger 셋팅
-log 셋팅(nginx와 flask의 log를 logstash를 통하여 elastic으로 전송)
-- logger에 대한 logstash pipleline관련하여 grok 문법에 대한 simulate는 kibana에서 [DevTools]->[Grok Debugger]에서 시뮬레이션 할 수 있음
+## 2. logger 수집
+
+1. flask 로그와 nginx 로그를 logstash를 통해서 elastic으로 전송
+2. logger에 대한 logstash pipleline관련하여 grok 문법에 대한 simulate는 kibana에서 [DevTools]->[Grok Debugger]에서 시뮬레이션 할 수 있음
     - logstash grok 문법 참조: https://github.com/logstash-plugins/logstash-patterns-core/blob/v2.0.5/patterns/grok-patterns#L86
-- flask에서 내부 logging과 logstash로 log를 전송하게끔 구성함 
+3. flask에서 내부 logging과 logstash로 log를 전송하게끔 구성함 
     - 실제 flask 내부에서 logstash.TCPLogstashHandler를 통해서 logstash 컨테이너에 log를 전송하게끔 하였음
     - (logstash pipeline관련 내용) .elk/logstash/pipeline/flask_log.conf
     - 로그 예:
@@ -35,7 +35,7 @@ log 셋팅(nginx와 flask의 log를 logstash를 통하여 elastic으로 전송)
                 "clientip" => "192.168.176.1"
             }
         ```
-- nginx의 access.log를 logstash로 전송하게끔 구성 (.elk/logstash/pipeline/flask_log.conf)
+4. nginx의 access.log를 logstash로 전송하게끔 구성 (.elk/logstash/pipeline/flask_log.conf)
     - docker-compose 내에서 nginx의 /var/log/nginx 디렉토리에 있는 access.log 를 mount하여 logstash에서 file로 write하게끔 구성 
     - (logstash pipeline관련 내용) .elk/logstash/pipeline/simple_web_log.conf
     - 로그 예:
@@ -80,7 +80,7 @@ log 셋팅(nginx와 flask의 log를 logstash를 통하여 elastic으로 전송)
 
 
 
-- elastic에 /web-YYYY.mm.dd 와 /access-YYYY.mm.dd로 로그가 쌓임
+5. elastic에 /web-YYYY.mm.dd 와 /access-YYYY.mm.dd로 로그가 쌓임
     ```
     [elastic에서 확인 방법]
         GET /web-2021.06.11/_search
