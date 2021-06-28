@@ -35,3 +35,38 @@
 2021-06-25 00:00:14,256 - werkzeug - 172.20.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
 2021-06-25 00:24:14,132 - werkzeug - 172.18.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
 2021-06-25 00:26:01,494 - werkzeug - 172.18.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-25 00:29:29,793 - werkzeug - 172.18.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-25 00:30:31,561 - werkzeug - 172.18.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-25 00:37:13,704 - werkzeug - 172.20.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-25 00:37:41,739 - werkzeug - 172.20.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-25 00:44:08,695 - werkzeug - 172.20.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-25 00:48:39,709 - werkzeug - 172.20.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-25 01:02:35,844 - werkzeug - 172.20.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-25 01:12:15,892 - werkzeug - 172.20.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-25 01:22:07,756 - werkzeug - 172.20.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-25 01:24:57,939 - werkzeug - 172.20.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-25 01:55:13,309 - werkzeug - 172.24.0.1 - GET - OS - requested http://localhost:8080/signup - INFO in log - [172.24.0.1] GET
+2021-06-25 01:55:19,781 - werkzeug - 172.24.0.1 - POST - OS - requested http://localhost:8080/signup - INFO in log - [172.24.0.1] POST
+2021-06-25 01:55:19,789 - werkzeug - 172.24.0.1 - POST - OS - requested http://localhost:8080/signup - INFO in log - request.json: None
+2021-06-25 01:55:19,812 - werkzeug - 172.24.0.1 - POST - OS - requested http://localhost:8080/signup - INFO in log - request.form: ImmutableMultiDict([('id', '1'), ('name', '1'), ('pw', '1')])
+2021-06-25 01:55:20,399 - werkzeug - 172.24.0.1 - POST - OS - requested http://localhost:8080/signup - INFO in log - create new_user: 1
+2021-06-25 04:30:02,729 - werkzeug - 172.24.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-25 04:30:03,853 - werkzeug - 172.24.0.1 - GET - OS - requested http://localhost:8080/signup - INFO in log - [172.24.0.1] GET
+2021-06-25 04:30:08,514 - werkzeug - 172.24.0.1 - POST - OS - requested http://localhost:8080/signup - INFO in log - [172.24.0.1] POST
+2021-06-25 04:30:08,517 - werkzeug - 172.24.0.1 - POST - OS - requested http://localhost:8080/signup - INFO in log - request.json: None
+2021-06-25 04:30:08,533 - werkzeug - 172.24.0.1 - POST - OS - requested http://localhost:8080/signup - INFO in log - request.form: ImmutableMultiDict([('id', '2'), ('name', '2'), ('pw', '2')])
+2021-06-25 04:30:09,146 - werkzeug - 172.24.0.1 - POST - OS - requested http://localhost:8080/signup - INFO in log - create new_user: 2
+2021-06-25 04:37:10,837 - werkzeug - 172.24.0.1 - POST - OS - requested http://localhost:8080/login - INFO in log - login user_id = 1
+2021-06-25 04:37:11,678 - werkzeug - 172.24.0.1 - POST - OS - requested http://localhost:8080/login - INFO in log - True
+2021-06-25 04:37:11,681 - werkzeug - 172.24.0.1 - POST - OS - requested http://localhost:8080/login - INFO in log - session is... 1
+2021-06-25 04:37:11,683 - werkzeug - 172.24.0.1 - POST - OS - requested http://localhost:8080/login - INFO in log - user(1) logined
+2021-06-25 04:37:11,853 - werkzeug - 172.24.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = 1
+2021-06-25 04:45:46,744 - werkzeug - 172.24.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = 1
+2021-06-25 04:45:47,940 - werkzeug - 172.24.0.1 - GET - OS - requested http://localhost:8080/logout - INFO in log - logout session = <SecureCookieSession {}>
+2021-06-25 04:45:47,975 - werkzeug - 172.24.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-27 23:28:27,718 - werkzeug - 172.24.0.1 - GET - OS - requested http://192.15.90.65:8080/ - INFO in log - session = None
+2021-06-27 23:28:28,629 - werkzeug - 172.24.0.1 - GET - OS - requested http://192.15.90.65:8080/signup - INFO in log - [172.24.0.1] GET
+2021-06-28 04:17:04,203 - werkzeug - 192.168.96.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-28 05:50:06,820 - werkzeug - 172.18.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-28 05:52:10,455 - werkzeug - 172.19.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None
+2021-06-28 05:55:00,813 - werkzeug - 172.18.0.1 - GET - OS - requested http://localhost:8080/ - INFO in log - session = None

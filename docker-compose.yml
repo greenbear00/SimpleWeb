@@ -10,8 +10,8 @@ services:
     ports:
       - "5000:5000"
     hostname: flask
-    networks:
-      - elastic
+    networks: 
+      - hadoop
     depends_on: 
       - postgres
     volumes:
@@ -23,8 +23,8 @@ services:
     restart: always
     ports:
       - "8080:8080"
-    networks:
-      - elastic
+    networks: 
+      - hadoop
     volumes:
       - ./nginx/log:/var/log/nginx
 
@@ -39,7 +39,7 @@ services:
       POSTGRES_PASSWORD:  postgres
       POSTGRES_DB:        simple
     networks:
-      - elastic
+      - hadoop
     ports:
       - 5432:5432
     volumes:
@@ -68,7 +68,7 @@ services:
     ports:
       - 9200:9200
     networks:
-      - elastic
+      - hadoop
     healthcheck:
       test: ["CMD", "curl","-s" ,"-f", "http://localhost:9200/_cat/health"]
       interval: 30s
@@ -94,7 +94,7 @@ services:
     volumes:
       - data02:/usr/share/elasticsearch/data
     networks:
-      - elastic
+      - hadoop
 
   es03:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
@@ -116,7 +116,7 @@ services:
     volumes:
       - data03:/usr/share/elasticsearch/data
     networks:
-      - elastic
+      - hadoop
 
   kib01: 
     image: docker.elastic.co/kibana/kibana:7.13.2
@@ -127,7 +127,7 @@ services:
       ELASTICSEARCH_URL: http://es01:9200
       ELASTICSEARCH_HOSTS: '["http://es01:9200","http://es02:9200","http://es03:9200"]'
     networks:
-      - elastic
+      - hadoop
     healthcheck:
       test: ["CMD", "curl","-s" ,"-f", "http://es01:5601/_cat/health"]
       interval: 30s
@@ -149,7 +149,7 @@ services:
       - ./nginx/log:/var/log/nginx
       - ./flask-web/log:/var/log/flask-web
     networks: 
-      - elastic
+      - hadoop
     restart: always
     healthcheck:
       test: ["CMD", "curl","-s" ,"-f", "http://es01:9600/_cat/health"]
@@ -165,8 +165,7 @@ volumes:
   data03:
   postgres_data: 
 
-networks:
-  elastic:
-    driver: bridge
-    name: elastic
+networks: 
+  hadoop:
+    name: hadoop
   

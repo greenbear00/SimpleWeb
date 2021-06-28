@@ -1,10 +1,8 @@
 # 구성
 1. flask+uwsgi+nginx를 붙임
     - request --[http://localhost:8081]--> nginx --[8081:5000]--> flask+uwsgi [app]
-2 logger 수집
+2. logger 수집
     - flask 로그와 nginx 로그를 logstash를 통해서 elastic으로 전송
-3. nifi 적용
-    - nifi로 RDB 내용과 logger를 
 
 
 ## logger 셋팅
@@ -92,7 +90,6 @@ log 셋팅(nginx와 flask의 log를 logstash를 통하여 elastic으로 전송)
             }
         }
     ```
-
 
 # build
 ```
